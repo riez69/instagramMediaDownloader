@@ -3,7 +3,7 @@ import re
 import json
 #siteurl = str(input(("masukkan link post instagram: ")))
 #siteurl = "https://www.instagram.com/p/CMNyruLARPg/?utm_source=ig_web_copy_link"
-link = "python/downloader/testinstagram.html"
+link = "testinstagram.html"
 
 # download seluruh isi website
 def downloader(link):
@@ -13,10 +13,10 @@ def downloader(link):
     req = requests.get(parse, headers = {'user-agent' : 'your bot 0.1'}, stream=True)
     for i in req.iter_lines():
         if i: list.append(i)
-    with open("python/downloader/testinstagram.html", "w") as file:
+    with open("testinstagram.html", "w") as file:
         for i in list:
             file.write(str(i)+"\n")
-    return ("python/downloader/testinstagram.html")
+    return ("testinstagram.html")
 
 # buka file html
 def htmlfile(link):
@@ -124,18 +124,20 @@ def videoUrl(list):
 def downloadFile(list):
     # memulai request ke link kemudian menulis bytenya ke file
     # NOTE! nama file sama dengan nama link sesudah tanda khusus dibuang
+    index = 0
     for link in list:
-        newlink = re.sub('[^a-zA-Z0-9 \n\.]', '', link)
+        newlink = re.sub('[^a-zA-Z0-9 \n\.]', '', link)+str(index)
         judul = str(newlink+ ".mp4" if "mp4" in link else newlink+ ".jpg")
+        index +=1
         param = {"property":"og:image"}
         parse = link
         req = requests.get(parse, headers = {'user-agent' : 'your bot 0.1'}, stream=True)
         if req.status_code== 200:
-            with open("python/downloader/{}".format(judul), "wb") as file:
+            with open("{}".format(judul), "wb") as file:
                 file.write(req.content)
-                return("{} terunduh".format(link))
+                print("{} terunduh".format(judul))
         else:
-            return("gagal mengunduh {}".format(link))
+            print("gagal mengunduh {}".format(link))
 
 # simplifikasi alur program
 def downloadAsset(link):
@@ -144,10 +146,12 @@ def downloadAsset(link):
     captionDownloader = caption(rawCaption(fileHtml))
     photosUrl = imageUrl(fileHtml)
     videosUrl = videoUrl(fileHtml)
-    photoDownloader = downloadFile
-    videoDownloader = downloadFile
-    return captionDownloader, photoDownloader(photosUrl), videoDownloader(videosUrl)
+    photoDownloader = downloadFile(photosUrl)
+    videoDownloader = downloadFile(videosUrl)
+    print((videosUrl))
+   
+
+siteurl= "https://www.instagram.com/p/CMk0voUJrws/?igshid=hcfgjbeum61q"
 
 
-
-#downloadAsset(siteurl)
+downloadAsset(siteurl)

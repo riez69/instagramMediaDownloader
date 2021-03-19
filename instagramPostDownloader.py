@@ -151,7 +151,7 @@ def downloadAsset(link):
     print((videosUrl))
    
 
-siteurl= "https://www.instagram.com/p/CMk0voUJrws/?igshid=hcfgjbeum61q"
+siteurl= str(input("masukkan link post instagram: "))
 
 
 downloadAsset(siteurl)
